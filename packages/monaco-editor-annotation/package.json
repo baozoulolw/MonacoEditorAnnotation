@@ -1,0 +1,45 @@
+{
+  "name": "monaco-editor-annotation",
+  "private": false,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest --ui"
+  },
+  "exports": {
+    ".": {
+      "default": "./dist/index.es.js"
+    }
+  },
+  "keywords": [
+    "monaco-editor"
+  ],
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "author": {
+    "name": "Baozoulolw",
+    "email": "Baozoulolw@Gmail.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/types": "^7.26.3",
+    "@types/babel__traverse": "^7.20.6",
+    "@vitest/ui": "catalog:",
+    "monaco-editor": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "^4.3.0",
+    "vitest": "catalog:"
+  },
+  "dependencies": {
+    "@babel/parser": "catalog:",
+    "@babel/traverse": "catalog:"
+  }
+}
