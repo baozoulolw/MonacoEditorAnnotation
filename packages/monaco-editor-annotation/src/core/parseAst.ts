@@ -25,7 +25,7 @@ export default function getMethodAtIndex(
   //     }
   //   }
   // }
-
+  
   // 2. 遍历 AST 查找方法
   traverse(ast, {
     FunctionDeclaration(path) {
