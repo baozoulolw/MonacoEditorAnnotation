@@ -3,16 +3,17 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted,useTemplateRef } from "vue";
-import * as monaco from 'monaco-editor'
+import { onMounted, useTemplateRef } from "vue";
+import * as monaco from "monaco-editor";
 import { register } from "monaco-editor-annotation";
+import { useTest } from "./utils";
 
-const editorDom = useTemplateRef('editor')
+const editorDom = useTemplateRef("editor");
 
 const initEditor = () => {
-  register(monaco)
-  const editor = monaco.editor.create(editorDom.value, {
-    value:`let a = {
+  register(monaco);
+  const editor = monaco.editor.create(editorDom.value!, {
+    value: `let a = {
   methods:{
     getRender(){
     },
@@ -25,24 +26,21 @@ const initEditor = () => {
     }
   }
 }`,
-    language: 'javascript',
-    theme: 'vs-dark',
-    automaticLayout: true
-  })
-  console.log(editor)
+    language: "javascript",
+    theme: "vs-dark",
+    automaticLayout: true,
+  });
+  console.log(editor);
   editor.addCommand(
-    monaco.KeyMod.Shift | monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyM,
+    monaco.KeyMod.WinCtrl | monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyM,
     () => {
-      const position = editor.getPosition()!; // 获取当前光标位置
-      const model = editor.getModel(); // 获取文档模型
-      console.log(model)
-      console.log(position)
+      const ast = useTest(editor); // 获取文档模型
+      console.log(ast);
     }
-  )
-
-}
+  );
+};
 onMounted(() => {
-  initEditor()
+  initEditor();
 });
 </script>
 <style lang="scss">
