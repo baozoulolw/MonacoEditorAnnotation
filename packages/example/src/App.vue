@@ -11,11 +11,10 @@ import traverse, { NodePath, Node } from "@babel/traverse";
 import * as t from "@babel/types";
 
 const editorDom = useTemplateRef("editor");
-
 const initEditor = () => {
   register(monaco);
   const editor = monaco.editor.create(editorDom.value!, {
-    value: `let b = (a = window.onload,{n},[m],...c) => {}`,
+    value: `let b = (a = window.onload.a.b,{n:{hj},k,j:[jk]},[m,{a1}],...c) => {}`,
     language: "javascript",
     theme: "vs-dark",
     automaticLayout: true,
@@ -25,6 +24,7 @@ const initEditor = () => {
     monaco.KeyMod.Shift | monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyM,
     () => {
       const result = useTest(editor);
+      const codes = editor.getValue();
       if (!result) return;
       const { ast, index } = result;
       traverse(ast, {
@@ -42,6 +42,7 @@ const initEditor = () => {
           let startIndex = 0;
           let endIndex = nodePath.node.end;
           console.log(nodePath.node.params);
+          getParams(nodePath.node.params, codes);
           if (parentNode && parentNode.type === "VariableDeclaration") {
             console.log(parentNode);
             const { start, end } = parentNode.loc || {};
@@ -54,45 +55,70 @@ const initEditor = () => {
 
   interface Param {
     name: string;
-    desc: string;
-    defaultValue: any;
-    type: string;
+    desc?: string;
+    type?: string;
+    defaultValue?: any;
   }
 
-  const getParams = (params: Node[]) => {
+  const getParams = (params: Node[], codes: string) => {
     let paramsArr: Param[] = [];
     params.forEach((param) => {
-      const { type } = param;
-      // a = 123 有默认值
-      if (type === "AssignmentPattern") {
-        const { left, right } = param;
-        paramsArr.push({
-          name: left.name,
-          desc: "",
-          defaultValue: right.value,
-          type: right.type,
-        });
-      }
-      // {a,b} 解构
-      if (type === "ObjectPattern") {
-      }
-      // ...n 剩余参数
-      if (type === "RestElement") {
-      }
+      paramsArr.push(...getParamsByNode(param, codes));
     });
+    console.log(paramsArr);
   };
 
-  const getInfoByNode = (node: Node, params: Param[] = []): Param[] => {
+  const getParamsByNode = (
+    node: Node,
+    codes: string,
+    params: Param[] = []
+  ): Param[] => {
     const { type } = node;
     if (type === "AssignmentPattern") {
-      const { left, right } = node;
+      const {
+        left,
+        right: { start, end },
+      } = node;
       params.push({
         name: (left as t.Identifier).name,
-        desc: "",
-        defaultValue: right.value,
-        type: right.type,
+        defaultValue: codes.slice(start!, end!),
       });
     }
+    if (type === "ObjectPattern") {
+      const { properties } = node;
+      properties.forEach((prop) => {
+        getParamsByNode(prop, codes, params);
+      });
+    }
+    if (type === "ArrayPattern") {
+      const { elements } = node;
+      elements.forEach((element) => {
+        getParamsByNode(element!, codes, params);
+      });
+    }
+    if (type === "RestElement") {
+      params.push({
+        name: (node.argument as t.Identifier).name,
+        desc: "",
+        type: "Array",
+      });
+    }
+    if (type === "Identifier") {
+      params.push({
+        name: node.name,
+      });
+    }
+    if (type === "ObjectProperty") {
+      const { value } = node;
+      if (value.type === "Identifier") {
+        params.push({
+          name: value.name,
+        });
+      } else {
+        getParamsByNode(value, codes, params);
+      }
+    }
+    return params;
   };
 };
 onMounted(() => {
