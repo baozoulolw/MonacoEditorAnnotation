@@ -1,3 +1,5 @@
+import { MethodInfo } from "../type";
+
 const generateAnnotation = (methodInfo: MethodInfo): string[] => {
   const annotationList = [
     "/**",
@@ -6,9 +8,11 @@ const generateAnnotation = (methodInfo: MethodInfo): string[] => {
     " * @author Baozoulolw",
   ];
   annotationList.push(
-    ...methodInfo.parameters.map((param) => ` * @param {${param}} ${param}`)
+    ...methodInfo.parameters.map(
+      (param) => ` * @param {${param.type || "*"}} ${param.name}${param.defaultValue ? ` default ${param.defaultValue}`:''}`
+    )
   );
-  annotationList.push(" * @return");
+  annotationList.push(" * @return {*}");
   annotationList.push(" */");
   return annotationList;
 };

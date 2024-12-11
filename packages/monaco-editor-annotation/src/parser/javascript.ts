@@ -1,18 +1,32 @@
 import { TraverseOptions, Node } from "@babel/traverse";
 import * as t from "@babel/types";
-const visiter: TraverseOptions = {
-  ArrowFunctionExpression(nodePath) {
-    const parentNode = nodePath.parentPath?.parent;
-    let startIndex = 0;
-    let endIndex = nodePath.node.end;
-    console.log(nodePath.node.params);
-    getParams(nodePath.node.params, codes);
-    if (parentNode && parentNode.type === "VariableDeclaration") {
-      console.log(parentNode);
-      const { start, end } = parentNode.loc || {};
-      startIndex = start!.index || 0;
-    }
-  },
+import { MethodInfo } from "../type";
+
+export const getVisiter = (
+  codes: string,
+  index: number,
+  result: MethodInfo[] = []
+): TraverseOptions => {
+  return {
+    ArrowFunctionExpression(nodePath) {
+      const parentNode = nodePath.parentPath?.parent;
+      let startIndex = 0;
+      let endIndex = nodePath.node.end!;
+      if (parentNode && parentNode.type === "VariableDeclaration") {
+        console.log(parentNode);
+        const { start } = parentNode.loc! || {};
+        startIndex = start!.index || 0;
+        if (index >= startIndex && index <= endIndex) {
+          result.push({
+            parameters:getParams(nodePath.node.params, codes),
+            methodName: '',
+            start,end:nodePath.node.loc?.end!,
+            isAsync:nodePath.node.async
+          })
+        }
+      }
+    },
+  };
 };
 
 interface Param {
@@ -27,7 +41,7 @@ const getParams = (params: Node[], codes: string) => {
   params.forEach((param) => {
     paramsArr.push(...getParamsByNode(param, codes));
   });
-  console.log(paramsArr);
+  return paramsArr
 };
 
 const getInfoByNode = (node: Node, params: Param[] = []): Param[] => {
