@@ -14,7 +14,13 @@ const editorDom = useTemplateRef("editor");
 const initEditor = () => {
   register(monaco);
   const editor = monaco.editor.create(editorDom.value!, {
-    value: `let b = (a = window.onload.a.b,{n:{hj},k,j:[jk]},[m,{a1}],...c) => {}`,
+    value: `let b = function(params) {
+      
+}
+function getAge(){
+    
+}
+`,
     language: "javascript",
     theme: "vs-dark",
     automaticLayout: true,
@@ -38,6 +44,7 @@ const initEditor = () => {
           console.log("ObjectMethod", node, 2);
         },
         ArrowFunctionExpression(nodePath) {
+          console.log("ArrowFunctionExpression", nodePath)
           const parentNode = nodePath.parentPath?.parent;
           let startIndex = 0;
           let endIndex = nodePath.node.end;

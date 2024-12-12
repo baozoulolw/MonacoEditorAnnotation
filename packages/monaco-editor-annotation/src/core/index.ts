@@ -16,8 +16,8 @@ const register = (monaco: typeof Monaco, options: AnnotationOptions) => {
       async() => {
         const position = editor.getPosition()!; // 获取当前光标位置
         const model = editor.getModel(); // 获取文档模型
-        const language = model?.getLanguageId()
-        console.log(language)
+        //const language = model?.getLanguageId()
+        //console.log(language)
 
         if (model) {
           const index = model?.getOffsetAt(position);

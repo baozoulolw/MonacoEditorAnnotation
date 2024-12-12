@@ -1,6 +1,6 @@
 import { TraverseOptions, Node } from "@babel/traverse";
 import * as t from "@babel/types";
-import { MethodInfo } from "../type";
+import { MethodInfo, Position } from "../type";
 
 export const getVisiter = (
   codes: string,
@@ -9,21 +9,77 @@ export const getVisiter = (
 ): TraverseOptions => {
   return {
     ArrowFunctionExpression(nodePath) {
-      const parentNode = nodePath.parentPath?.parent;
-      let startIndex = 0;
-      let endIndex = nodePath.node.end!;
-      if (parentNode && parentNode.type === "VariableDeclaration") {
-        console.log(parentNode);
-        const { start } = parentNode.loc! || {};
-        startIndex = start!.index || 0;
-        if (index >= startIndex && index <= endIndex) {
-          result.push({
-            parameters:getParams(nodePath.node.params, codes),
-            methodName: '',
-            start,end:nodePath.node.loc?.end!,
-            isAsync:nodePath.node.async
-          })
+      let start: Position;
+      const end = nodePath.node.loc?.end!;
+      let methodName: string = "";
+      if (nodePath.key === "value") {
+        start = nodePath.parent.loc?.start!;
+        methodName = ((nodePath.parent as t.ObjectProperty).key as t.Identifier)
+          .name;
+      } else {
+        start = nodePath.parentPath.parent.loc?.start!;
+        if (nodePath.parent.type === "Identifier") {
+          methodName = nodePath.parent.name;
         }
+      }
+      if (index >= start.index && index <= end.index) {
+        result.push({
+          parameters: getParams(nodePath.node.params, codes),
+          methodName,
+          start,
+          end,
+          isAsync: nodePath.node.async,
+        });
+      }
+    },
+    FunctionDeclaration(nodePath) {
+      const { start, end } = nodePath.node.loc!;
+      const startIndex = start.index || 0;
+      const endIndex = end.index || 0;
+      if (index >= startIndex && index <= endIndex) {
+        result.push({
+          parameters: getParams(nodePath.node.params, codes),
+          methodName: nodePath.node.id!.name,
+          start,
+          end,
+          isAsync: nodePath.node.async,
+        });
+      }
+    },
+    FunctionExpression(nodePath) {
+      let start: Position;
+      const end = nodePath.node.loc?.end!;
+      let methodName: string = "";
+      if (nodePath.key === "value") {
+        start = nodePath.parent.loc?.start!;
+        methodName = ((nodePath.parent as t.ObjectProperty).key as t.Identifier)
+          .name;
+      } else {
+        start = nodePath.parentPath.parent.loc?.start!;
+        if (nodePath.parent.type === "Identifier") {
+          methodName = nodePath.parent.name;
+        }
+      }
+      if (index >= start.index && index <= end.index) {
+        result.push({
+          parameters: getParams(nodePath.node.params, codes),
+          methodName,
+          start,
+          end,
+          isAsync: nodePath.node.async,
+        });
+      }
+    },
+    ObjectMethod(nodePath) {
+      const { start, end } = nodePath.node.loc!;
+      if (index >= start.index && index <= end.index) {
+        result.push({
+          parameters: getParams(nodePath.node.params, codes),
+          methodName: (nodePath.node.key as t.Identifier).name || "",
+          start,
+          end,
+          isAsync: nodePath.node.async,
+        });
       }
     },
   };
@@ -41,7 +97,7 @@ const getParams = (params: Node[], codes: string) => {
   params.forEach((param) => {
     paramsArr.push(...getParamsByNode(param, codes));
   });
-  return paramsArr
+  return paramsArr;
 };
 
 const getInfoByNode = (node: Node, params: Param[] = []): Param[] => {

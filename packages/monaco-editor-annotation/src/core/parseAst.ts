@@ -16,5 +16,5 @@ export default async function getMethodAtIndex(
   const { getVisiter } = await import("../parser/javascript");
   const result:MethodInfo[] = []
   traverse(ast, getVisiter(editor.getValue(), index, result));
-  return result[0];
+  return result[result.length - 1];
 }
