@@ -40,8 +40,8 @@
   "dependencies": {
     "@babel/parser": "catalog:",
     "@babel/traverse": "catalog:",
-    "@types/lodash": "^4.17.13",
-    "dayjs": "^1.11.13",
-    "lodash": "^4.17.21"
+    "@types/lodash": "catalog:",
+    "dayjs": "catalog:",
+    "lodash": "catalog:"
   }
 }

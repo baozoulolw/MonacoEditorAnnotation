@@ -18,12 +18,21 @@ catalogs:
     '@types/babel__traverse':
       specifier: ^7.20.6
       version: 7.20.6
+    '@types/lodash':
+      specifier: ^4.17.13
+      version: 4.17.13
     '@vitejs/plugin-vue':
       specifier: ^5.2.1
       version: 5.2.1
     '@vitest/ui':
       specifier: ^2.1.8
       version: 2.1.8
+    dayjs:
+      specifier: ^1.11.13
+      version: 1.11.13
+    lodash:
+      specifier: ^4.17.21
+      version: 4.17.21
     monaco-editor:
       specifier: ''
       version: 0.52.2
@@ -121,13 +130,13 @@ importers:
         specifier: 'catalog:'
         version: 7.26.4
       '@types/lodash':
-        specifier: ^4.17.13
+        specifier: 'catalog:'
         version: 4.17.13
       dayjs:
-        specifier: ^1.11.13
+        specifier: 'catalog:'
         version: 1.11.13
       lodash:
-        specifier: ^4.17.21
+        specifier: 'catalog:'
         version: 4.17.21
     devDependencies:
       '@babel/types':
