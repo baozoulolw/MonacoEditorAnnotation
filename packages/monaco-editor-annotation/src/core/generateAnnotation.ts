@@ -75,13 +75,10 @@ const replaceVariables = (
   defaultValue: Record<string, string>,
   methodInfo?: MethodInfo
 ) => {
-  console.log('template',template,)
   // 使用正则匹配 ${...} 格式的占位符
   return template.replace(/\$\{([\w.]+)\}/g, (match, key) => {
     if (key in variable) {
       const value = variable[key];
-      console.log('v:',value)
-      console.log('key:',key)
       // 判断值是字符串还是方法
       return typeof value === "function"
         ? value(

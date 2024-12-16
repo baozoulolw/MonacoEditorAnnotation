@@ -1,17 +1,13 @@
 {
   "name": "monaco-editor-annotation",
   "private": false,
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest --ui"
-  },
-  "exports": {
-    "development": "./src/index.ts",
-    "default": "./dist/index.mjs"
   },
   "keywords": [
     "monaco-editor"
