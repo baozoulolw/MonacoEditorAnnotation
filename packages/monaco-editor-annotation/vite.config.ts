@@ -13,8 +13,9 @@ export default defineConfig({
     outDir: "dist",
     lib: {
       entry: "./src/index.ts", // 工具库入口
-      name: "Utils", // 工具库名称
-      fileName: (format: string) => `index.${format}.js`,
+      formats: ["es"],
+      name:'index',
+      fileName: () => `[name].mjs`,
     },
     terserOptions: {
       compress: {

@@ -11,11 +11,10 @@
     "typescript": "catalog:",
     "vite": "catalog:"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "pnpm": {
     "hoistPattern": [
-      "monaco-editor" 
+      "monaco-editor"
     ]
   }
 }

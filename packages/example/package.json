@@ -11,7 +11,7 @@
   "dependencies": {
     "monaco-editor": "",
     "monaco-editor-annotation": "workspace:*",
-    "sass": "^1.82.0",
+    "sass": "catalog:",
     "vue": "catalog:",
     "@babel/parser": "catalog:",
     "@babel/traverse": "catalog:"
@@ -19,11 +19,11 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "catalog:",
     "typescript": "catalog:",
-    "unocss": "^0.65.1",
+    "unocss": "catalog:",
     "vite": "catalog:",
     "vite-plugin-monaco-editor": "catalog:",
     "vue-tsc": "catalog:",
-    "@babel/types": "^7.26.3",
-    "@types/babel__traverse": "^7.20.6"
+    "@babel/types": "catalog:",
+    "@types/babel__traverse": "catalog:"
   }
 }

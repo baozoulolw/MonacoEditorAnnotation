@@ -10,15 +10,14 @@
     "test": "vitest --ui"
   },
   "exports": {
-    ".": {
-      "default": "./dist/index.es.js"
-    }
+    "development": "./src/index.ts",
+    "default": "./dist/index.mjs"
   },
   "keywords": [
     "monaco-editor"
   ],
-  "main": "dist/index.umd.js",
-  "module": "dist/index.es.js",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
     "dist/*"
@@ -29,17 +28,20 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@babel/types": "^7.26.3",
-    "@types/babel__traverse": "^7.20.6",
+    "@babel/types": "catalog:",
+    "@types/babel__traverse": "catalog:",
     "@vitest/ui": "catalog:",
     "monaco-editor": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-dts": "^4.3.0",
+    "vite-plugin-dts": "catalog:",
     "vitest": "catalog:"
   },
   "dependencies": {
     "@babel/parser": "catalog:",
-    "@babel/traverse": "catalog:"
+    "@babel/traverse": "catalog:",
+    "@types/lodash": "^4.17.13",
+    "dayjs": "^1.11.13",
+    "lodash": "^4.17.21"
   }
 }
